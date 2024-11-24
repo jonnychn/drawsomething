@@ -95,8 +95,8 @@
             e.preventDefault();
 
             const rect = canvas.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+            const x = (e.touches ? e.touches[0].pageX : e.pageX) - rect.left;
+            const y = (e.touches ? e.touches[0].pageY : e.pageY) - rect.top;
 
             ctx.lineTo(x, y);
             ctx.stroke();
