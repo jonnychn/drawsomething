@@ -27,12 +27,14 @@
     <div id="controls">
         <label for="penSize">Pen Size: </label>
         <input type="range" id="penSize" min="1" max="20" value="5">
+        <button id="eraseButton">Erase</button>
     </div>
     <canvas id="canvas" width="600" height="400"></canvas>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const penSizeInput = document.getElementById('penSize');
+        const eraseButton = document.getElementById('eraseButton');
 
         let painting = false;
         let penSize = penSizeInput.value;
@@ -83,6 +85,11 @@
         canvas.addEventListener('touchstart', startPosition);
         canvas.addEventListener('touchend', endPosition);
         canvas.addEventListener('touchmove', draw);
+
+        // Erase button functionality
+        eraseButton.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
     </script>
 </body>
 </html>
