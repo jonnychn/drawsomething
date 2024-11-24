@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Drawing Web App</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #canvas {
+            border: 1px solid black;
+            touch-action: none;
+        }
+        #controls {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Whiteboard App</h1>
+    <div id="controls">
+        <label for="penSize">Pen Size: </label>
+        <input type="range" id="penSize" min="1" max="20" value="5">
+    </div>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const penSizeInput = document.getElementById('penSize');
+
+        let painting = false;
+        let penSize = penSizeInput.value;
+
+        // Set initial canvas properties
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = penSize;
+
+        // Update pen size when changed
+        penSizeInput.addEventListener('input', () => {
+            penSize = penSizeInput.value;
+            ctx.lineWidth = penSize;
+        });
+
+        // Mouse and touch events
+        const startPosition = (e) => {
+            painting = true;
+            draw(e);
+        };
+
+        const endPosition = () => {
+            painting = false;
+            ctx.beginPath();
+        };
+
+        const draw = (e) => {
+            if (!painting) return;
+            e.preventDefault();
+
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        };
+
+        // Event listeners for mouse
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+
+        // Event listeners for touch
+        canvas.addEventListener('touchstart', startPosition);
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchmove', draw);
+    </script>
+</body>
+</html>
